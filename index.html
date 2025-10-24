@@ -1,259 +1,464 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Q星空wd | 个人站点</title>
-  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-  <style type="text/tailwindcss">
-    @theme {
-      --color-bg: #191919;
-      --color-accent: #00f497;
-      --font-inter: 'Inter', sans-serif;
-    }
-    @utility grid-bg {
-      background-image: 
-        linear-gradient(rgba(0, 244, 151, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 244, 151, 0.05) 1px, transparent 1px);
-      background-size: 20px 20px;
-      background-attachment: fixed;
-    }
-    @utility neon-glow {
-      box-shadow: 0 0 5px var(--color-accent), 0 0 10px var(--color-accent/0.5);
-    }
-    @utility text-glow {
-      text-shadow: 0 0 3px var(--color-accent), 0 0 6px var(--color-accent/0.8);
-    }
-    body {
-      font-family: var(--font-inter);
-      grid-bg;
-    }
-    .section {
-      scroll-margin-top: 80px;
-    }
-    .card {
-      transition: all 0.3s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      neon-glow;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q星空wd的个人网站</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #191919;
+            --accent-color: #00f497;
+            --text-color: #e0e0e0;
+            --border-color: #333;
+        }
+
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: var(--primary-color);
+            background-image: 
+                linear-gradient(rgba(0, 244, 151, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 244, 151, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 40px 40px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 100px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .header-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 244, 151, 0.15) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 244, 151, 0.7);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .accent-line {
+            height: 4px;
+            width: 120px;
+            background: var(--accent-color);
+            margin: 0 auto 30px;
+            box-shadow: 0 0 12px rgba(0, 244, 151, 0.8);
+        }
+
+        .section {
+            padding: 70px 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: #fff;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px rgba(0, 244, 151, 0.8);
+        }
+
+        .content-box {
+            background: rgba(25, 25, 25, 0.8);
+            border: 2px solid var(--border-color);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 0 rgba(0, 244, 151, 0);
+        }
+
+        .content-box:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 244, 151, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .content-box:hover:before {
+            left: 100%;
+        }
+
+        .content-box:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(0, 244, 151, 0.2);
+        }
+
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 244, 151, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-icon:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 244, 151, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .game-icon:hover:after {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-color);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--primary-color);
+        }
+
+        .btn:hover:before {
+            left: 0;
+        }
+
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .social-link {
+            color: #b0b0b0;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-link:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .qq-group {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .tech-border {
+            position: relative;
+            padding: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            margin: 30px 0;
+        }
+
+        .tech-border:before, .tech-border:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+        }
+
+        .tech-border:before {
+            top: -2px;
+            left: -2px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tech-border:after {
+            bottom: -2px;
+            right: -2px;
+            border-left: none;
+            border-top: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section {
+                padding: 50px 0;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-bg text-gray-200">
-  <!-- 导航栏 -->
-  <nav class="fixed top-0 left-0 right-0 bg-bg/80 backdrop-blur-md z-50 border-b border-accent/30">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-accent text-glow">Q星空wd</a>
-      <div class="hidden md:flex space-x-6">
-        <a href="#about" class="hover:text-accent transition-colors">关于我</a>
-        <a href="#works" class="hover:text-accent transition-colors">独立游戏</a>
-        <a href="#blog" class="hover:text-accent transition-colors">博客</a>
-        <a href="#contact" class="hover:text-accent transition-colors">联系我</a>
-      </div>
-      <button class="md:hidden text-accent">
-        <<i class="fas fa-bars text-2xl"></</i>
-      </button>
-    </div>
-  </nav>
-
-  <!-- 英雄区 -->
-  <section class="pt-32 pb-20 md:pt-40 md:pb-32">
-    <div class="container mx-auto px-4 text-center">
-      <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold mb-4 text-glow">Q星空wd</h1>
-      <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">个人站点 · 独立游戏开发者 · 科幻爱好者</p>
-      <a href="#about" class="inline-block bg-accent/20 hover:bg-accent/30 text-accent py-3 px-8 rounded-lg border border-accent/50 neon-glow transition-all">
-        探索更多 <<i class="fas fa-arrow-down ml-2"></</i>
-      </a>
-    </div>
-  </section>
-
-  <!-- 关于我 -->
-  <section id="about" class="section py-20">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">关于我</h2>
-      <div class="grid md:grid-cols-2 gap-10 items-center">
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg p-8">
-          <h3 class="text-2xl font-bold mb-4 text-accent">个人简介</h3>
-          <p class="mb-4">【此处留空，可填写你的个人经历、兴趣爱好等】</p>
-          <div class="flex flex-wrap gap-3 mt-6">
-            <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">技能1</span>
-            <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">技能2</span>
-            <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-sm">技能3</span>
-            <!-- 可继续添加 -->
-          </div>
-        </div>
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg p-8">
-          <h3 class="text-2xl font-bold mb-4 text-accent">技能栈</h3>
-          <div class="grid grid-cols-3 gap-4">
-            <div class="text-center">
-              <<i class="fas fa-code text-4xl mb-2 text-accent"></</i>
-              <p>前端开发</p>
+<body>
+    <div class="grid-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-glow"></div>
+            <h1>Q星空wd</h1>
+            <div class="accent-line"></div>
+            <p class="subtitle">独立游戏开发者</p>
+        </header>
+        
+        <section class="section">
+            <h2>关于我</h2>
+            <div class="content-box">
+                <p>懒得写</p>
+                <div class="tech-border"></div>
+                <p>我的开发理念：懒</p>
             </div>
-            <div class="text-center">
-              <<i class="fas fa-gamepad text-4xl mb-2 text-accent"></</i>
-              <p>游戏开发</p>
+        </section>
+        
+        <section class="section">
+            <h2>我的独立游戏</h2>
+            <div class="content-box game-card">
+                <div class="game-icon">
+                    <img src="https://raw.githubusercontent.com/qwdxk/Mekunecr_web/main/mekunecr_icon.png" alt="通用学游戏图标">
+                </div>
+                <h3>通用学 (Mekunecr)</h3>
+                <p>还在开发，懒得写</p>
+                <!-- 您可以在此处添加游戏截图或更多详细信息 -->
             </div>
-            <div class="text-center">
-              <<i class="fas fa-paint-brush text-4xl mb-2 text-accent"></</i>
-              <p>视觉设计</p>
+            <a href="#" class="btn">查看项目进展</a>
+        </section>
+        
+        <section class="section">
+            <h2>开发日志</h2>
+            <div class="content-box">
+                <h3>通用学开发笔记 #1</h3>
+                <p>懒</p>
+                <div class="tech-border"></div>
+                <p>懒。</p>
+                <!-- 您可以在此处添加开发日志内容 -->
             </div>
-            <!-- 可继续添加 -->
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 独立游戏：通用学 -->
-  <section id="works" class="section py-20 bg-bg/30">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">独立游戏 · 通用学</h2>
-      <div class="grid md:grid-cols-2 gap-10 items-center">
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg overflow-hidden">
-          <img src="https://picsum.photos/600/400" alt="游戏截图" class="w-full h-64 object-cover">
-          <div class="p-6">
-            <h3 class="text-2xl font-bold mb-2 text-accent">通用学</h3>
-            <p class="mb-4">【此处留空，可填写游戏简介、玩法、开发历程等】</p>
-            <a href="#" class="inline-block bg-accent/20 hover:bg-accent/30 text-accent py-2 px-6 rounded-lg transition-all">
-              下载试玩 <<i class="fas fa-download ml-1"></</i>
-            </a>
-          </div>
-        </div>
-        <div class="space-y-6">
-          <div class="card bg-bg/50 border border-accent/20 rounded-lg p-6">
-            <h3 class="text-xl font-bold mb-2 text-accent">开发亮点</h3>
-            <p>【此处留空，可填写技术亮点，如“原创科幻世界观”“创新交互设计”等】</p>
-          </div>
-          <div class="card bg-bg/50 border border-accent/20 rounded-lg p-6">
-            <h3 class="text-xl font-bold mb-2 text-accent">更新计划</h3>
-            <p>【此处留空，可填写后续版本的新内容、优化方向等】</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 博客 -->
-  <section id="blog" class="section py-20">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">博客</h2>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg overflow-hidden">
-          <img src="https://picsum.photos/400/200?random=1" alt="博客封面" class="w-full h-40 object-cover">
-          <div class="p-6">
-            <span class="text-accent text-sm mb-2 inline-block">2025-10-24</span>
-            <h3 class="text-xl font-bold mb-2">【博客标题1】</h3>
-            <p class="mb-4">【此处留空，可填写文章简介】</p>
-            <a href="#" class="text-accent hover:underline inline-block">阅读全文 <<i class="fas fa-arrow-right ml-1"></</i></a>
-          </div>
-        </div>
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg overflow-hidden">
-          <img src="https://picsum.photos/400/200?random=2" alt="博客封面" class="w-full h-40 object-cover">
-          <div class="p-6">
-            <span class="text-accent text-sm mb-2 inline-block">2025-10-20</span>
-            <h3 class="text-xl font-bold mb-2">【博客标题2】</h3>
-            <p class="mb-4">【此处留空，可填写文章简介】</p>
-            <a href="#" class="text-accent hover:underline inline-block">阅读全文 <<i class="fas fa-arrow-right ml-1"></</i></a>
-          </div>
-        </div>
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg overflow-hidden">
-          <img src="https://picsum.photos/400/200?random=3" alt="博客封面" class="w-full h-40 object-cover">
-          <div class="p-6">
-            <span class="text-accent text-sm mb-2 inline-block">2025-10-15</span>
-            <h3 class="text-xl font-bold mb-2">【博客标题3】</h3>
-            <p class="mb-4">【此处留空，可填写文章简介】</p>
-            <a href="#" class="text-accent hover:underline inline-block">阅读全文 <<i class="fas fa-arrow-right ml-1"></</i></a>
-          </div>
-        </div>
-      </div>
-      <div class="text-center mt-10">
-        <a href="#" class="inline-block bg-accent/20 hover:bg-accent/30 text-accent py-2 px-6 rounded-lg transition-all">
-          查看更多博客 <<i class="fas fa-chevron-right ml-1"></</i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 联系我 -->
-  <section id="contact" class="section py-20 bg-bg/30">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">联系我</h2>
-      <div class="grid md:grid-cols-2 gap-10">
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg p-8">
-          <h3 class="text-2xl font-bold mb-6 text-accent">社交平台</h3>
-          <div class="space-y-4">
-            <a href="#" class="flex items-center hover:text-accent transition-colors">
-              <<i class="fas fa-github text-2xl mr-3"></</i>
-              <span>GitHub</span>
-            </a>
-            <a href="#" class="flex items-center hover:text-accent transition-colors">
-              <<i class="fas fa-weibo text-2xl mr-3"></</i>
-              <span>微博</span>
-            </a>
-            <a href="#" class="flex items-center hover:text-accent transition-colors">
-              <<i class="fas fa-steam text-2xl mr-3"></</i>
-              <span>Steam</span>
-            </a>
-            <!-- 可继续添加 -->
-          </div>
-          <h3 class="text-2xl font-bold mt-8 mb-6 text-accent">邮箱</h3>
-          <p class="mb-4">【此处留空，填写你的邮箱】</p>
-        </div>
-        <div class="card bg-bg/50 border border-accent/20 rounded-lg p-8">
-          <h3 class="text-2xl font-bold mb-6 text-accent">留言表单</h3>
-          <form>
-            <div class="mb-4">
-              <label for="name" class="block mb-2">姓名</label>
-              <input type="text" id="name" class="w-full bg-bg/50 border border-accent/30 rounded-lg px-4 py-2 focus:border-accent focus:outline-none">
+            <div class="content-box">
+                <h3>独立游戏开发心得</h3>
+                <p>懒</p>
+                <!-- 您可以在此处添加更多日志内容 -->
             </div>
-            <div class="mb-4">
-              <label for="email" class="block mb-2">邮箱</label>
-              <input type="email" id="email" class="w-full bg-bg/50 border border-accent/30 rounded-lg px-4 py-2 focus:border-accent focus:outline-none">
+            <a href="#" class="btn">查看全部日志</a>
+        </section>
+        
+        <section class="section">
+            <h2>联系方式</h2>
+            <div class="content-box">
+                <p>如果有兴趣交流游戏开发或提供反馈，欢迎加入QQ群：</p>
+                <div class="qq-group">QQ群：755796721</div>
+                <div class="social-links">
+                    <a href="#" class="social-link">G</a>
+                    <a href="#" class="social-link">M</a>
+                    <a href="#" class="social-link">S</a>
+                </div>
             </div>
-            <div class="mb-4">
-              <label for="message" class="block mb-2">留言内容</label>
-              <textarea id="message" rows="5" class="w-full bg-bg/50 border border-accent/30 rounded-lg px-4 py-2 focus:border-accent focus:outline-none"></textarea>
-            </div>
-            <button type="submit" class="w-full bg-accent/20 hover:bg-accent/30 text-accent py-3 rounded-lg transition-all">
-              发送留言
-            </button>
-          </form>
-        </div>
-      </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 Q星空wd</p>
+        </footer>
     </div>
-  </section>
 
-  <!-- 页脚 -->
-  <footer class="py-8 border-t border-accent/20">
-    <div class="container mx-auto px-4 text-center">
-      <p>&copy; 2025 Q星空wd 个人站点 · 独立游戏开发者</p>
-    </div>
-  </footer>
-
-  <script>
-    // 滚动时导航栏样式变化
-    window.addEventListener('scroll', function() {
-      const nav = document.querySelector('nav');
-      if (window.scrollY > 50) {
-        nav.classList.add('py-2');
-        nav.classList.remove('py-3');
-      } else {
-        nav.classList.add('py-3');
-        nav.classList.remove('py-2');
-      }
-    });
-
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+    <script>
+        // 增强机械风格的交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const contentBoxes = document.querySelectorAll('.content-box');
+            const techBorders = document.querySelectorAll('.tech-border');
+            
+            // 内容框入场动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            contentBoxes.forEach(box => {
+                box.style.opacity = 0;
+                box.style.transform = 'translateY(30px)';
+                box.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(box);
+            });
+            
+            // 技术边框动画
+            techBorders.forEach(border => {
+                border.style.opacity = 0;
+                border.style.transform = 'scaleX(0)';
+                border.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                
+                const borderObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = 1;
+                            entry.target.style.transform = 'scaleX(1)';
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                borderObserver.observe(border);
+            });
+            
+            // 添加点击效果
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size/2;
+                    const y = e.clientY - rect.top - size/2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
         });
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
