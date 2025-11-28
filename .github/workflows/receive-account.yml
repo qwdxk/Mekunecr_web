@@ -1,0 +1,37 @@
+name: 接收和处理账号申请
+
+on:
+  push:
+    paths:
+      - 'account.mue'
+    branches: [ main ]
+
+jobs:
+  process-accounts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+      
+    - name: 设置Python环境
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+        
+    - name: 处理账号申请
+      run: |
+        if [ -f "account.mue" ]; then
+          echo "找到账号文件，开始处理..."
+          python process_accounts.py
+        else
+          echo "账号文件不存在"
+        fi
+        
+    - name: 提交处理结果
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "处理账号申请" || echo "没有更改可提交"
+        git push
