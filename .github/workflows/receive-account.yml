@@ -1,13 +1,15 @@
-name: 接收和处理账号申请
+name: 处理登录申请
 
 on:
+  # 监听对docs目录的更改（当通过GitHub Pages提交时）
   push:
     paths:
-      - 'pending_applications/*.json'
-    branches: [main]
+      - 'docs/**'
+  # 手动触发
+  workflow_dispatch:
 
 jobs:
-  process-login-applications:
+  process-applications:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,10 +24,10 @@ jobs:
       with:
         python-version: '3.9'
 
-    - name: 处理登录申请
+    - name: 处理申请
       run: |
-        echo "开始处理登录申请..."
-        python3 process_login_applications.py
+        echo "开始处理申请..."
+        python3 process_applications.py
 
     - name: 提交更改
       run: |
@@ -38,18 +40,3 @@ jobs:
           git commit -m "处理登录申请"
           git push
         fi
-
-  # 原有的账号处理任务（保持不变）
-  process-account-file:
-    runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, 'account') || github.event_name == 'workflow_dispatch'
-    
-    steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 处理账号文件
-      run: |
-        echo "处理账号文件变更..."
-        # 原有的账号处理逻辑
-
