@@ -1,1 +1,4 @@
-<account>:name<"Q星空wd">:id<000000000>:password_hash<"哈希密码">:device_id<"">
+<account>:name<"Q星空wd">:id<000000000>:password<"密码">
+<account>:name<"鱼雷可">:id<000000001>:password<"142">
+<account>:name<"测试账号">:id<000000002>:password<"567">
+<account>:name<"Qxkwd">:id<000000003>:password<"742">
