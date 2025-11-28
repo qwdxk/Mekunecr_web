@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>提交登录申请</title>
+    <script>
+        // 简单的提交处理页面
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+            var results = regex.exec(window.location.search);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        
+        function submitApplication() {
+            var dataParam = getUrlParameter('data');
+            if (dataParam) {
+                try {
+                    var applicationData = JSON.parse(dataParam);
+                    console.log('收到申请:', applicationData);
+                    
+                    // 这里可以添加提交到GitHub的逻辑
+                    // 目前只是模拟成功响应
+                    document.getElementById('status').innerHTML = 
+                        '<h2>申请提交成功！</h2><p>申请ID: ' + applicationData.client_id + '</p>';
+                    
+                    // 在实际实现中，这里应该调用GitHub API
+                } catch (e) {
+                    document.getElementById('status').innerHTML = 
+                        '<h2>数据格式错误</h2><p>' + e.message + '</p>';
+                }
+            } else {
+                document.getElementById('status').innerHTML = 
+                    '<h2>未收到申请数据</h2>';
+            }
+        }
+        
+        window.onload = submitApplication;
+    </script>
+</head>
+<body>
+    <div id="status">
+        <h2>处理中...</h2>
+    </div>
+</body>
+</html>
