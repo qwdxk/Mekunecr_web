@@ -1,0 +1,87 @@
+name: 处理登录申请
+
+on:
+  # 手动触发工作流（您可以在收到申请后手动运行）
+  workflow_dispatch:
+    inputs:
+      application_data:
+        description: '申请数据JSON'
+        required: true
+
+jobs:
+  process-application:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 处理申请
+      run: |
+        echo "处理登录申请..."
+        
+        # 解析输入数据
+        APPLICATION_DATA='${{ github.event.inputs.application_data }}'
+        echo "申请数据: $APPLICATION_DATA"
+        
+        # 创建或更新状态文件
+        if [ ! -f "login_status.json" ]; then
+          echo "{}" > login_status.json
+        fi
+        
+        # 使用Python处理
+        python3 << 'EOF'
+        import json
+        import os
+        from datetime import datetime
+        
+        # 解析申请数据
+        try:
+            app_data = json.loads(os.environ['APPLICATION_DATA'])
+            client_id = app_data.get('client_id', 'unknown')
+            username = app_data.get('username', 'unknown')
+            
+            # 读取状态文件
+            if os.path.exists('login_status.json'):
+                with open('login_status.json', 'r') as f:
+                    status_data = json.load(f)
+            else:
+                status_data = {}
+            
+            # 检查账号是否存在（简化版）
+            account_exists = True  # 假设总是存在，您需要手动验证
+            
+            if account_exists:
+                # 积压申请
+                status_data[client_id] = {
+                    "username": username,
+                    "status": "pending",
+                    "received_at": datetime.now().isoformat()
+                }
+                print(f"申请已积压: {username}")
+            else:
+                status_data[client_id] = {
+                    "username": username,
+                    "status": "rejected",
+                    "reason": "账号不存在",
+                    "received_at": datetime.now().isoformat()
+                }
+                print(f"申请被拒绝: {username}")
+            
+            # 保存状态文件
+            with open('login_status.json', 'w') as f:
+                json.dump(status_data, f, indent=2)
+                
+        except Exception as e:
+            print(f"处理错误: {e}")
+        EOF
+
+    - name: 提交更改
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add login_status.json
+        git commit -m "更新登录申请状态" || echo "没有更改"
+        git push
