@@ -1,0 +1,9 @@
+name: 记录申请
+
+on: push
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "检测到代码变更 - $(date)"
