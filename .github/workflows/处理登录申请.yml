@@ -1,0 +1,22 @@
+name: 处理登录申请
+
+on:
+  # 监听新Issue创建
+  issues:
+    types: [opened]
+  
+  # 手动触发
+  workflow_dispatch:
+
+jobs:
+  处理申请:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 运行处理脚本
+      run: |
+        echo "开始处理登录申请..."
+        python 处理登录申请.py
