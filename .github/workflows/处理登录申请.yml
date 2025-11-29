@@ -1,92 +1,66 @@
 name: 处理登录申请
 
 on:
-  issues:
-    types: [opened]
+  push:
+    paths:
+      - 'applications/*.json'
 
 jobs:
   处理申请:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.title, '登录申请:')
     
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 处理申请
+    - name: 处理申请文件
       run: |
-        echo "处理登录申请..."
+        echo "处理登录申请文件..."
         
         # 确保状态文件存在
-        if [ ! -f "登录状态.json" ]; then
-          echo "{}" > "登录状态.json"
+        if [ ! -f "status.json" ]; then
+          echo "{}" > status.json
         fi
         
-        # 从Issue提取信息
-        ISSUE_TITLE="${{ github.event.issue.title }}"
-        ISSUE_BODY="${{ github.event.issue.body }}"
-        
-        echo "Issue标题: $ISSUE_TITLE"
-        echo "Issue内容: $ISSUE_BODY"
-        
-        # 提取申请ID（格式：登录申请:app_123456789）
-        APPLICATION_ID=$(echo "$ISSUE_TITLE" | grep -o 'app_[0-9_]\+' | head -1)
-        
-        # 提取加密数据
-        ENCRYPTED_DATA=$(echo "$ISSUE_BODY" | grep -A1 -B1 "加密数据" | grep -v "加密数据" | head -1 | tr -d '[:space:]')
-        
-        echo "申请ID: $APPLICATION_ID"
-        echo "加密数据: $ENCRYPTED_DATA"
-        
-        if [ -n "$APPLICATION_ID" ] && [ -n "$ENCRYPTED_DATA" ]; then
-          echo "处理申请: $APPLICATION_ID"
-          
-          # 使用Python处理JSON
-          python3 << EOF
+        # 处理所有新申请文件
+        for file in applications/*.json; do
+          if [ -f "$file" ]; then
+            echo "处理文件: $file"
+            
+            # 提取申请ID
+            application_id=$(basename "$file" .json)
+            
+            # 更新状态文件
+            python3 -c "
 import json
 import os
-from datetime import datetime
 
-app_id = os.environ.get('APPLICATION_ID')
-encrypted_data = os.environ.get('ENCRYPTED_DATA')
+app_id = os.environ['APPLICATION_ID']
+status_file = 'status.json'
 
 # 读取状态文件
-try:
-    with open('登录状态.json', 'r', encoding='utf-8') as f:
-        status_data = json.load(f)
-except:
-    status_data = {}
+with open(status_file, 'r') as f:
+    status_data = json.load(f)
 
-# 添加新申请
+# 添加申请状态
 status_data[app_id] = {
-    '加密数据': encrypted_data,
-    '状态': '待处理',
-    '提交时间': datetime.now().isoformat(),
-    'issue_number': ${{ github.event.issue.number }}
+    'status': 'pending',
+    'file': app_id + '.json'
 }
 
 # 保存状态文件
-with open('登录状态.json', 'w', encoding='utf-8') as f:
-    json.dump(status_data, f, ensure_ascii=False, indent=2, ensure_ascii=False)
+with open(status_file, 'w') as f:
+    json.dump(status_data, f, indent=2)
 
-print('申请已添加到状态文件')
-EOF
-        else
-          echo "无法提取申请信息"
-        fi
+print('申请已添加到状态文件: ' + app_id)
+            "
+          fi
+        done
 
     - name: 提交更改
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add "登录状态.json"
-        
-        if git diff --staged --quiet; then
-          echo "没有更改需要提交"
-        else
-          git commit -m "添加登录申请: $APPLICATION_ID"
-          git push
-          echo "更改已提交"
-        fi
+        git add .
+        git commit -m "处理登录申请" || echo "无变更"
+        git push || echo "推送失败"
