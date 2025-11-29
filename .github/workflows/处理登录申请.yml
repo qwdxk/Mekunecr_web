@@ -29,12 +29,12 @@ jobs:
             application_id=$(basename "$file" .json)
             
             # 使用Python处理JSON
-            python3 << EOF
+            python3 -c "
 import json
 import os
 
-app_id = "$application_id"
-status_file = "status.json"
+app_id = '$application_id'
+status_file = 'status.json'
 
 # 读取状态文件
 try:
@@ -54,7 +54,7 @@ with open(status_file, 'w') as f:
     json.dump(status_data, f, indent=2)
 
 print('申请已添加到状态文件: ' + app_id)
-EOF
+            "
           fi
         done
 
