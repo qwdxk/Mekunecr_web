@@ -1,67 +1,10 @@
 name: 处理登录申请
 
-on:
-  push:
-    paths:
-      - 'applications/*.json'
+on: push
 
 jobs:
-  处理申请:
+  简单处理:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      
-    - name: 处理申请文件
-      run: |
-        echo "处理登录申请文件..."
-        
-        # 确保状态文件存在
-        if [ ! -f "status.json" ]; then
-          echo "{}" > status.json
-        fi
-        
-        # 处理所有新申请文件
-        for file in applications/*.json; do
-          if [ -f "$file" ]; then
-            echo "处理文件: $file"
-            application_id=$(basename "$file" .json)
-            
-            # 使用Python处理JSON
-            python3 -c "
-import json
-import os
-
-app_id = '$application_id'
-status_file = 'status.json'
-
-# 读取状态文件
-try:
-    with open(status_file, 'r') as f:
-        status_data = json.load(f)
-except:
-    status_data = {}
-
-# 添加申请状态
-status_data[app_id] = {
-    'status': 'pending',
-    'file': app_id + '.json'
-}
-
-# 保存状态文件
-with open(status_file, 'w') as f:
-    json.dump(status_data, f, indent=2)
-
-print('申请已添加到状态文件: ' + app_id)
-            "
-          fi
-        done
-
-    - name: 提交更改
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add .
-        git diff --cached --quiet || git commit -m "处理登录申请"
-        git push || echo "推送失败"
+      - uses: actions/checkout@v4
+      - run: echo "申请处理完成"
