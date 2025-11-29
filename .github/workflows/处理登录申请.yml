@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: 检出代码
       uses: actions/checkout@v4
-
+      
     - name: 处理申请文件
       run: |
         echo "处理登录申请文件..."
@@ -26,21 +26,22 @@ jobs:
         for file in applications/*.json; do
           if [ -f "$file" ]; then
             echo "处理文件: $file"
-            
-            # 提取申请ID
             application_id=$(basename "$file" .json)
             
-            # 更新状态文件
-            python3 -c "
+            # 使用Python处理JSON
+            python3 << EOF
 import json
 import os
 
-app_id = os.environ['APPLICATION_ID']
-status_file = 'status.json'
+app_id = "$application_id"
+status_file = "status.json"
 
 # 读取状态文件
-with open(status_file, 'r') as f:
-    status_data = json.load(f)
+try:
+    with open(status_file, 'r') as f:
+        status_data = json.load(f)
+except:
+    status_data = {}
 
 # 添加申请状态
 status_data[app_id] = {
@@ -53,7 +54,7 @@ with open(status_file, 'w') as f:
     json.dump(status_data, f, indent=2)
 
 print('申请已添加到状态文件: ' + app_id)
-            "
+EOF
           fi
         done
 
@@ -62,5 +63,5 @@ print('申请已添加到状态文件: ' + app_id)
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git commit -m "处理登录申请" || echo "无变更"
+        git diff --cached --quiet || git commit -m "处理登录申请"
         git push || echo "推送失败"
