@@ -1,0 +1,16 @@
+name: 堆积登录申请
+
+on:
+  push:
+    paths:
+      - 'applications/*.json'
+
+jobs:
+  accumulate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+      
+      - name: 记录申请
+        run: echo "新申请已堆积 - $(date)"
